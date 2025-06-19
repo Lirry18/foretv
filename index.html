@@ -314,7 +314,26 @@
     const closeSound = document.getElementById('closeSound');
     const backgroundMusic = document.getElementById('backgroundMusic');
     const muteBtn = document.getElementById('muteBtn');
-    backgroundMusic.volume = 0.3;  // Volume range 0.0 (mute) to 1.0 (full)
+    //backgroundMusic.volume = 0.3;  // Volume range 0.0 (mute) to 1.0 (full)
+
+
+     // Fade in background music after intro ends - defined as function
+     function fadeInMusic() {
+      const targetVolume = 0.3;  // final volume
+      backgroundMusic.volume = 0;
+      backgroundMusic.play().catch(() => {});
+      const fadeDuration = 3000; // in milliseconds
+      const fadeStep = 0.01;
+      const fadeInterval = fadeDuration / (targetVolume / fadeStep);
+      const fadeAudio = setInterval(() => {
+        if (backgroundMusic.volume + fadeStep < targetVolume) {
+            backgroundMusic.volume = parseFloat((backgroundMusic.volume + fadeStep).toFixed(2));
+        } else {
+          backgroundMusic.volume = targetVolume;
+          clearInterval(fadeAudio);
+        }
+      }, fadeInterval);
+    }
 
     // Play click sound on menu item click
    document.querySelectorAll('#menu li').forEach(item => {
@@ -341,8 +360,7 @@
       video.load();
       video.style.display = 'none';
       menu.style.display = 'block';
-      backgroundMusic.currentTime = 0;
-      backgroundMusic.play();
+      fadeInMusic();
     });
 
 

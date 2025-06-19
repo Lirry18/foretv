@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Foret V</title>
+  <style>
+     /* Embed custom font */
+        @font-face {
+      font-family: 'CustomStar';
+      src: url('customfont.ttf') format('truetype'); /* Place your .ttf file in the same directory */
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* Reset and base styles */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      background: url('background.png') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'CustomStar', Arial, sans-serif;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 30;
+      overflow-y: auto;
+    }
+    .overlay-content {
+      background: #111;
+      margin: 60px auto;
+      padding: 100px;
+      border-radius: 8px;
+      width: 80%;
+      color: #fff;
+      position: relative;
+      font-family: 'CustomStar', Arial, sans-serif;
+      color: #ff0;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
+
+    /* Intro video full-screen */
+    #intro-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 10;
+    }
+
+    /* Sidebar menu, hidden initially */
+    #menu {
+      /* display: none; */
+      position: fixed;
+      top: 50%;
+      left: 100px;
+      transform: translateY(-50%);
+      z-index: 5;
+      font-family: 'CustomStar', Arial, sans-serif;
+    }
+
+    #menu #logo {
+      display: block;
+      margin: 0 auto 15px;
+      width: 200px;
+      height: auto;
+    }
+
+    #menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #menu li {
+      margin: 15px 0;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    #menu #muteBtn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid #fff;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-family: inherit;
+    }
+
+    #menu li:hover {
+      color: #ff0;
+    }
+    /* Teams overlay columns */
+    .teams-container {
+      display: flex;
+      gap: 10px;
+    }
+    .team-col {
+      flex: 1;
+      padding: 10px;
+      border-radius: 4px;
+      background: #222;
+    }
+    .team-col:nth-child(1) { color: red; }
+    .team-col:nth-child(2) { color: yellow; }
+    .team-col:nth-child(3) { color: rgb(75, 75, 255); }
+    .team-col:nth-child(4) { color: green; }
+    /* Locatie overlay flex layout */
+    .locatie-container {
+      display: flex;
+      gap: 20px;
+    }
+    .locatie-address {
+      flex: 1;
+    }
+    .locatie-map {
+      flex: 2;
+      background: #333;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio assets -->
+  <audio id="hoverSound" src="hover.mp3" preload="auto"></audio>
+  <audio id="closeSound" src="close.mp3" preload="auto"></audio>
+  <audio id="backgroundMusic" src="background-music.mp3" preload="auto" loop></audio>
+
+  <!-- Star Wars intro video -->
+  <video id="intro-video" autoplay>
+    <source src="intro.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Sidebar menu -->
+  <nav id="menu">
+    <img id="logo" src="logo.png" alt="Logo">
+    <button id="muteBtn">Mute Music</button>
+    <ul>
+      <li onclick="openOverlay('bericht')">Officieel bericht</li>
+      <li onclick="openOverlay('teams')">Teams</li>
+      <li onclick="openOverlay('locatie')">Locatie</li>
+      <!-- <li onclick="playIntro()">Speel video</li> -->
+    </ul>
+  </nav>
+
+  <!-- Officieel bericht Overlay -->
+  <div id="overlay-bericht" class="overlay">
+    <div class="overlay-content">
+      <span class="close-btn" onclick="closeOverlay('bericht')">&times;</span>
+      <div class="scrollable">
+        <h2>ULTRA SECRET // URGENT!</h2>
+        <h3>FORET LUSTRUM V — SPACE RACE</h3>
+        <p><strong>Missiecodenaam:</strong> Bouillon Blast-Off 2025</p>
+        <h3>INTERNE TRANSMISSIE – VANUIT HET BSA HQ</h3>
+        <p><strong>FORETFAMILIE!</strong><br>
+        Nadat velen van u eerder deelnamen aan glorieuze missies rondom het Sprookjesbos, Mission TT Timetravel, Bal Masqué &amp; Congres van het Kwaad, zijn we inmiddels vijf jaar verder – en minstens vijf dimensies verder van huis...</p>
+        <p>Het universum gromt. De space race is ontspoord. Het is geen wedstrijd meer, maar een kosmische ramkoers.</p>
+        <p>De Russen staan op het punt <em>Sputnik666</em> te lanceren – een satelliet die samenzweringstheorieën rechtstreeks je brein in beam’t.</p>
+        <p>Elon Musk heeft zijn ziel en Tesla verkocht om met zijn zoon X AE A-Xii op Mars een zuurstof-belastende crypto-dictatuur te stichten.</p>
+        <p>De Chinezen voeden hun AI-schepen met kindernachtmerries en gesteriliseerde Oeigoeren, op weg naar totale interstellaire dominantie.</p>
+        <p>Oom Donald heeft aangekondigd dat hij "Space Force 2.0: Make The Galaxy Great Again" lanceert — een intergalactische realityshow waarin planeten met lage ratings live worden opgeblazen. Financiering? Heffingen op maanzaad.</p>
+        <p>En dichter bij huis? Het kabinet van Geert is gecrasht als een Poolse raket op een Belgische camping. Lil Dick Schoof deed een poging het wrakhout bijeen te rapen, maar zijn raket was te kort, zijn visie te scheef, en zijn ruimtepak te beige.</p>
+        <p>En dus… is het aan ons. Terwijl de grootmachten bezig zijn met geopolitieke penisvergelijkingen, is dit onze kans om de melkweg te bevrijden.</p>
+        <h3>WIJ ZIJN DE BENELUX(URY) SPACE AGENCY</h3>
+        <p>Geheim sinds 1963. Gevestigd in een vergeten caravan, diep verscholen in een Ardens bos – op een plek waar zelfs Marc Dutroux nog een puntje aan kan zuigen – hebben wij ons plan gesmeed.</p>
+        <p>Decenialang, bleven we onder de radar, onzichtbaar voor buitenlandse satellieten, terwijl we bouwden aan iets groters. En heel veel camembert aten. En nu is de tijd daar.</p>
+        <p>Daarom hebben wij <strong>jou</strong> – uitverkoren wezen van het kosmos – uit jouw kwadrant opgeroepen. Jij bent geselecteerd. Gekeurd. Gewogen. En klaar bevonden.</p>
+        <p>Voor deze missie hebben we geen gewone mensen nodig. We hebben interstellaire units nodig. Jij en 27 anderen zijn geroepen op een precieus, gecodeerd moment in tijd. Niet eerder. Niet later.</p>
+        <p>Op Aardse coördinaten: Bouillon, Belgische Ardennen. Daar bevindt zich een schuilplek die satellieten slecht kunnen traceren. Een locatie gekozen vanwege zijn geomagnetische stilte, wellness, bourgondisch drinkterras en zijn beschikbaarheid op ardenneresidences.com.</p>
+        <h3>JOUW ROL &amp; PROGRAMMA</h3>
+        <p>Als afgezant van jouw galactische sector ben jij uitverkoren voor <strong>MISSIE: BOUILLON BLAST-OFF</strong>. Je wordt niet alleen getest op lef, kennis en dansmoves, maar ook op wijnherkenning uit parallelle tijdlijnen.</p>
+        <p>Samen met 27 andere entiteiten vorm je tijdelijke ruimtecoalities (teams). De indeling? Die krijg je binnenkort via een geheime transmissielink — samen met je toewijzing voor de culinaire capsuledienst, waarbij je één keer met je crew het eten verzorgt voor de rest van de space agency.</p>
+        <p>Verder nemen jullie tijdens de missie deel aan:</p>
+        <ul>
+          <li>De Wijnproeverijquiz – met kiekjes uit voorgaande Forêt-edities</li>
+          <li>Ruimtelijke challenges – voor punten, glorie en het ego van jou en je space team</li>
+          <li>De Bonte Avond – Het epische hoogtepunt waarop iedereen zijn intergalactische alter ego onthult en we met zijn allen de dampkring nog harder laten dampen, en tevens het hoofddoel van onze missie proberen te bewerkstelligen. Zullen we uiteindelijk opstijgen?</li>
+        </ul>
+        <h3>MISSIEBRIEFING</h3>
+        <p><strong>Sector:</strong> Belgische bos-bastion Bouillon (WGS-84: geheim)</p>
+        <p><strong>Basis:</strong> 17e eeuwse molen gelegen in het hart van de Semoisvalei – doet denken aan een middeleeuwse Mars-module. Fontijn met warp functie voor eventuele speedtravel.</p>
+        <p><strong>Docking-tijd:</strong> Vrijdag 11 juli 2025, 16:00 uur (Aardse timewarp) – parkeer je proton-pod op tijd, het kan weer druk worden op de melkweg.</p>
+        <p><strong>Crew size:</strong> 28 intergalactische units – allen te heet voor de dampkring. Van Cosmic Cowboys en vergeten planeten tot Aliën Aristocrats, we hebben jullie allemaal nodig.</p>
+        <p>Zet uw zonnebril op – ook al is het donker in de ruimte.<br>
+        Trek uw ruimtepak strak.<br>
+        En meld u bij de BSA.</p>
+        <p>De melkweg moet gemolken worden</p>
+        <p>Hoogachtend,<br>
+        Hoofdcommandanten<br>
+        BeNeLux(ury) Space Agency</p>
+      </div>
+    </div>
+  </div>
+    
+  <!-- Teams Overlay -->
+  <div id="overlay-teams" class="overlay">
+    <div class="overlay-content">
+      <span class="close-btn" onclick="closeOverlay('teams')">&times;</span>
+      <h2>Teams</h2>
+      <div class="teams-container">
+        <div class="team-col">
+          <h3>Rood</h3>
+          <ul>
+            <li>Joni</li>
+            <li>Wietze</li>
+            <li>Anna</li>
+            <li>Eli</li>
+            <li>Lotte</li>
+            <li>Tadesse</li>
+            <li>Pim</li>
+          </ul>
+        </div>
+        <div class="team-col">
+          <h3>Geel</h3>
+          <ul>
+            <li>Niels</li>
+            <li>Karsten</li>
+            <li>Monique</li>
+            <li>Eva</li>
+            <li>Evelien</li>
+            <li>Annika</li>
+            <li>Lirry</li>
+          </ul>
+        </div>
+        <div class="team-col">
+          <h3>Blauw</h3>
+          <ul>
+            <li>Pelle</li>
+            <li>Thomas</li>
+            <li>Rochaya</li>
+            <li>Flore</li>
+            <li>Floris</li>
+            <li>Joost</li>
+            <li>Sven</li>
+          </ul>
+        </div>
+        <div class="team-col">
+          <h3>Groen</h3>
+          <ul>
+            <li>Vincent</li>
+            <li>Misha</li>
+            <li>Jelmer</li>
+            <li>Rozan</li>
+            <li>Laura</li>
+            <li>Machiel</li>
+            <li>Rosa</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- Locatie Overlay -->
+    <div id="overlay-locatie" class="overlay">
+        <div class="overlay-content">
+          <span class="close-btn" onclick="closeOverlay('locatie')">&times;</span>
+          <h2>Locatie</h2>
+          <div class="locatie-container">
+            <div class="locatie-address">
+              <p>AUBERGE DU MOULIN HIDEUX <br> Rue de la Gare<br>6831 Bouillon<br>Belgie</p>
+              <div style="text-align: center; margin-top: 15px;">
+                <a href="https://maps.app.goo.gl/rcXkRxJrMz9bE6C57" target="_blank" rel="noopener noreferrer">
+                  <button style="padding: 10px 20px; font-size: 1em; border: none; border-radius: 4px; background: #ff0; color: #000; cursor: pointer;">
+                    Google Maps Link
+                  </button>
+                </a>
+              </div>
+            </div>
+            
+            <div class="locatie-map">
+                <div class="locatie-map">
+                    <img src="moulin.png" alt="Locatie afbeelding" style="width:100%; height:100%; object-fit:cover; border-radius:4px;">
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <script>
+    const video = document.getElementById('intro-video');
+    const menu = document.getElementById('menu');
+    const hoverSound = document.getElementById('hoverSound');
+    const closeSound = document.getElementById('closeSound');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const muteBtn = document.getElementById('muteBtn');
+    backgroundMusic.volume = 0.3;  // Volume range 0.0 (mute) to 1.0 (full)
+
+    // Play click sound on menu item click
+   document.querySelectorAll('#menu li').forEach(item => {
+      item.addEventListener('click', () => {
+        hoverSound.currentTime = 0;
+        hoverSound.play().catch(err => console.warn('Click sound play prevented:', err));
+      });
+    });
+
+    // Mute/unmute background music
+     muteBtn.addEventListener('click', () => {
+      backgroundMusic.muted = !backgroundMusic.muted;
+      muteBtn.textContent = backgroundMusic.muted ? 'Unmute Music' : 'Mute Music';
+    });
+
+    // Show menu when intro ends
+    video.addEventListener('ended', () => {
+      video.pause();
+      video.currentTime = 0;
+      // Prevent any further autoplay or audio
+      video.autoplay = false;
+      video.muted = true;
+      video.removeAttribute('autoplay');
+      video.load();
+      video.style.display = 'none';
+      menu.style.display = 'block';
+      backgroundMusic.currentTime = 0;
+      backgroundMusic.play();
+    });
+
+
+    // // Play intro again
+    // function playIntro() {
+    //   closeAllOverlays();
+    //   video.currentTime = 0;
+    //   video.style.display = 'block';
+    //   menu.style.display = 'none';
+    //   video.play();
+    // }
+
+    // Open specific overlay
+    function openOverlay(type) {
+      menu.style.display = 'none';
+      document.getElementById(`overlay-${type}`).style.display = 'block';
+    }
+
+    // Close specific overlay
+    function closeOverlay(type) {
+    closeSound.currentTime = 500;
+    closeSound.play().catch(err => console.warn('Close sound play prevented:', err));
+      document.getElementById(`overlay-${type}`).style.display = 'none';
+      menu.style.display = 'block';
+    }
+
+    // Close all overlays
+    function closeAllOverlays() {
+      ['bericht','teams','locatie'].forEach(type => {
+        document.getElementById(`overlay-${type}`).style.display = 'none';
+      });
+    }
+
+    // Fallback: reveal menu if video fails or won't autoplay
+    video.addEventListener('error', () => menu.style.display = 'block');
+    setTimeout(() => { if (video.paused) menu.style.display = 'block'; }, 3000);
+  </script>
+
+</body>
+</html>
